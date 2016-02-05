@@ -1,0 +1,890 @@
+gplink-1.4.2 #1169 (Jan 11 2016)
+Copyright (c) 1998-2015 gputils project
+Listing File Generated: 1-28-2016  00:08:02
+ 
+ 
+Address  Value    Disassembly              Source
+-------  -----    -----------              ------
+                                           ;--------------------------------------------------------
+                                           ; File Created by SDCC : free open source ANSI-C Compiler
+                                           ; Version 3.5.0 #9253 (Jan 11 2016) (Linux)
+                                           ; This file was generated Thu Jan 28 00:08:02 2016
+                                           ;--------------------------------------------------------
+                                           ; PIC port for the 14-bit core
+                                           ;--------------------------------------------------------
+                                           ;	.file	"main.c"
+                                           	list	p=16f630
+                                           	radix dec
+                                           	include "p16f630.inc"
+                                                   LIST
+                                           
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F630 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+                                           
+                                                   NOLIST
+                                           ;--------------------------------------------------------
+                                           ; config word(s)
+                                           ;--------------------------------------------------------
+002007   3fd2     addlw   0xd2             	__config 0x3fd2
+                                           ;--------------------------------------------------------
+                                           ; external declarations
+                                           ;--------------------------------------------------------
+                                           	extern	_STATUSbits
+                                           	extern	_PORTAbits
+                                           	extern	_PORTCbits
+                                           	extern	_INTCONbits
+                                           	extern	_PIR1bits
+                                           	extern	_T1CONbits
+                                           	extern	_CMCONbits
+                                           	extern	_OPTION_REGbits
+                                           	extern	_TRISAbits
+                                           	extern	_TRISCbits
+                                           	extern	_PIE1bits
+                                           	extern	_PCONbits
+                                           	extern	_OSCCALbits
+                                           	extern	_WPUbits
+                                           	extern	_WPUAbits
+                                           	extern	_IOCbits
+                                           	extern	_IOCAbits
+                                           	extern	_VRCONbits
+                                           	extern	_EECON1bits
+                                           	extern	_INDF
+                                           	extern	_TMR0
+                                           	extern	_PCL
+                                           	extern	_STATUS
+                                           	extern	_FSR
+                                           	extern	_PORTA
+                                           	extern	_PORTC
+                                           	extern	_PCLATH
+                                           	extern	_INTCON
+                                           	extern	_PIR1
+                                           	extern	_TMR1
+                                           	extern	_TMR1L
+                                           	extern	_TMR1H
+                                           	extern	_T1CON
+                                           	extern	_CMCON
+                                           	extern	_OPTION_REG
+                                           	extern	_TRISA
+                                           	extern	_TRISC
+                                           	extern	_PIE1
+                                           	extern	_PCON
+                                           	extern	_OSCCAL
+                                           	extern	_WPU
+                                           	extern	_WPUA
+                                           	extern	_IOC
+                                           	extern	_IOCA
+                                           	extern	_VRCON
+                                           	extern	_EEDAT
+                                           	extern	_EEDATA
+                                           	extern	_EEADR
+                                           	extern	_EECON1
+                                           	extern	_EECON2
+                                           	extern	__sdcc_gsinit_startup
+                                           ;--------------------------------------------------------
+                                           ; global declarations
+                                           ;--------------------------------------------------------
+                                           	global	_check_generator
+                                           	global	_sensitivity_down
+                                           	global	_sensitivity_up
+                                           	global	_calibration
+                                           	global	_send_error
+                                           	global	_TIMER_CONFIG
+                                           	global	_PORT_CONFIG
+                                           	global	_send_signal
+                                           	global	_delay_ms
+                                           	global	_dr_metal
+                                           	global	_bl_metal
+                                           	global	_main
+                                           	global	_calibration_complete
+                                           	global	_buffer_high
+                                           	global	_buffer_low
+                                           	global	_sensitivity
+                                           
+                                           	global PSAVE
+                                           	global SSAVE
+                                           	global WSAVE
+                                           	global STK12
+                                           	global STK11
+                                           	global STK10
+                                           	global STK09
+                                           	global STK08
+                                           	global STK07
+                                           	global STK06
+                                           	global STK05
+                                           	global STK04
+                                           	global STK03
+                                           	global STK02
+                                           	global STK01
+                                           	global STK00
+                                           
+                                           sharebank udata_ovr 0x0020
+                                           PSAVE	res 1
+                                           SSAVE	res 1
+                                           WSAVE	res 1
+                                           STK12	res 1
+                                           STK11	res 1
+                                           STK10	res 1
+                                           STK09	res 1
+                                           STK08	res 1
+                                           STK07	res 1
+                                           STK06	res 1
+                                           STK05	res 1
+                                           STK04	res 1
+                                           STK03	res 1
+                                           STK02	res 1
+                                           STK01	res 1
+                                           STK00	res 1
+                                           
+                                           ;--------------------------------------------------------
+                                           ; global definitions
+                                           ;--------------------------------------------------------
+                                           UD_main_0	udata
+                                           _calibration_complete	res	1
+                                           
+                                           UD_main_1	udata
+                                           _buffer_high	res	1
+                                           
+                                           UD_main_2	udata
+                                           _buffer_low	res	1
+                                           
+                                           ;--------------------------------------------------------
+                                           ; absolute symbol definitions
+                                           ;--------------------------------------------------------
+                                           ;--------------------------------------------------------
+                                           ; compiler-defined variables
+                                           ;--------------------------------------------------------
+                                           UDL_main_0	udata
+                                           r0x1005	res	1
+                                           r0x1004	res	1
+                                           r0x1006	res	1
+                                           r0x1007	res	1
+                                           r0x1008	res	1
+                                           r0x1009	res	1
+                                           r0x100A	res	1
+                                           r0x100B	res	1
+                                           r0x100C	res	1
+                                           r0x100D	res	1
+                                           r0x100E	res	1
+                                           r0x100F	res	1
+                                           r0x1010	res	1
+                                           r0x1011	res	1
+                                           r0x1012	res	1
+                                           ;--------------------------------------------------------
+                                           ; initialized data
+                                           ;--------------------------------------------------------
+                                           
+                                           ID_main_0	idata
+                                           _sensitivity
+                                           	db	0x00
+                                           
+                                           ;--------------------------------------------------------
+                                           ; overlayable items in internal ram 
+                                           ;--------------------------------------------------------
+                                           ;	udata_ovr
+                                           ;--------------------------------------------------------
+                                           ; reset vector 
+                                           ;--------------------------------------------------------
+                                           STARTUP	code 0x0000
+000000   0000     nop                      	nop
+                                           	pagesel __sdcc_gsinit_startup
+000001   2953     goto    0x0153           	goto	__sdcc_gsinit_startup
+                                           ;--------------------------------------------------------
+                                           ; code
+                                           ;--------------------------------------------------------
+                                           code_main	code
+                                           ;***
+                                           ;  pBlock Stats: dbName = M
+                                           ;***
+                                           ;entry:  _main	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _PORT_CONFIG
+                                           ;   _TIMER_CONFIG
+                                           ;   _delay_ms
+                                           ;   _calibration
+                                           ;   _check_generator
+                                           ;   _sensitivity_up
+                                           ;   _sensitivity_down
+                                           ;   _delay_ms
+                                           ;   _calibration
+                                           ;   _PORT_CONFIG
+                                           ;   _TIMER_CONFIG
+                                           ;   _delay_ms
+                                           ;   _calibration
+                                           ;   _check_generator
+                                           ;   _sensitivity_up
+                                           ;   _sensitivity_down
+                                           ;   _delay_ms
+                                           ;   _calibration
+                                           ;3 compiler assigned registers:
+                                           ;   r0x1011
+                                           ;   r0x1012
+                                           ;   STK00
+                                           ;; Starting pCode block
+                                           _main	;Function start
+                                           ; 2 exit points
+                                           ;	.line	142; "main.c"	PORT_CONFIG();
+000002   20f5     call    0x00f5           	CALL	_PORT_CONFIG
+                                           ;	.line	143; "main.c"	TIMER_CONFIG();
+000003   20f0     call    0x00f0           	CALL	_TIMER_CONFIG
+                                           ;	.line	144; "main.c"	setbit(PTC,1);                              // no calibration LED_RED
+000004   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000005   1487     bsf     0x07, 0x1        	BSF	_PORTC,1
+                                           ;	.line	145; "main.c"	clrbit(PTC,2);
+000006   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000007   00bd     movwf   0x3d             	MOVWF	r0x1011
+000008   30fb     movlw   0xfb             	MOVLW	0xfb
+000009   053d     andwf   0x3d, 0x0        	ANDWF	r0x1011,W
+00000a   0087     movwf   0x07             	MOVWF	_PORTC
+                                           _00245_DS_
+                                           ;	.line	147; "main.c"	while (calibration_complete==0) {
+00000b   3000     movlw   0x00             	MOVLW	0x00
+00000c   044b     iorwf   0x4b, 0x0        	IORWF	_calibration_complete,W
+00000d   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00000e   2830     goto    0x0030           	GOTO	_00247_DS_
+                                           ;	.line	148; "main.c"	if (rdbit(PTC,3)==1){
+00000f   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000010   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000011   3908     andlw   0x08             	ANDLW	0x08
+000012   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000013   3001     movlw   0x01             	MOVLW	0x01
+000014   00bd     movwf   0x3d             	MOVWF	r0x1011
+000015   00be     movwf   0x3e             	MOVWF	r0x1012
+000016   3a01     xorlw   0x01             	XORLW	0x01
+000017   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000018   280b     goto    0x000b           	GOTO	_00245_DS_
+                                           ;	.line	149; "main.c"	delay_ms(5);            //contact bounce
+000019   3005     movlw   0x05             	MOVLW	0x05
+00001a   00af     movwf   0x2f             	MOVWF	STK00
+00001b   3000     movlw   0x00             	MOVLW	0x00
+00001c   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	150; "main.c"	if(rdbit(PTC,3)==1){
+00001d   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+00001e   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+00001f   3908     andlw   0x08             	ANDLW	0x08
+000020   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000021   3001     movlw   0x01             	MOVLW	0x01
+000022   00bd     movwf   0x3d             	MOVWF	r0x1011
+000023   00be     movwf   0x3e             	MOVWF	r0x1012
+000024   3a01     xorlw   0x01             	XORLW	0x01
+000025   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000026   280b     goto    0x000b           	GOTO	_00245_DS_
+                                           ;	.line	151; "main.c"	calibration();
+000027   20c8     call    0x00c8           	CALL	_calibration
+                                           ;	.line	152; "main.c"	setbit(PTC,2);  //set LED_GREEN
+000028   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000029   1507     bsf     0x07, 0x2        	BSF	_PORTC,2
+                                           ;	.line	153; "main.c"	clrbit(PTC,1);
+00002a   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+00002b   00bd     movwf   0x3d             	MOVWF	r0x1011
+00002c   30fd     movlw   0xfd             	MOVLW	0xfd
+00002d   053d     andwf   0x3d, 0x0        	ANDWF	r0x1011,W
+00002e   0087     movwf   0x07             	MOVWF	_PORTC
+00002f   280b     goto    0x000b           	GOTO	_00245_DS_
+                                           _00247_DS_
+                                           ;	.line	157; "main.c"	INTF=0;                             //start detect
+000030   1283     bcf     0x03, 0x5        	BANKSEL	_INTCONbits
+000031   108b     bcf     0x0b, 0x1        	BCF	_INTCONbits,1
+                                           _00248_DS_
+                                           ;	.line	158; "main.c"	while (INTF==0);
+000032   1283     bcf     0x03, 0x5        	BANKSEL	_INTCONbits
+000033   1c8b     btfss   0x0b, 0x1        	BTFSS	_INTCONbits,1
+000034   2832     goto    0x0032           	GOTO	_00248_DS_
+                                           ;	.line	159; "main.c"	TMR1ON =1;
+000035   1410     bsf     0x10, 0x0        	BSF	_T1CONbits,0
+                                           ;	.line	160; "main.c"	INTF=0;
+000036   108b     bcf     0x0b, 0x1        	BCF	_INTCONbits,1
+                                           _00251_DS_
+                                           ;	.line	161; "main.c"	while (INTF==0);
+000037   1283     bcf     0x03, 0x5        	BANKSEL	_INTCONbits
+000038   1c8b     btfss   0x0b, 0x1        	BTFSS	_INTCONbits,1
+000039   2837     goto    0x0037           	GOTO	_00251_DS_
+                                           ;	.line	162; "main.c"	TMR1ON=0;
+00003a   1010     bcf     0x10, 0x0        	BCF	_T1CONbits,0
+                                           ;	.line	163; "main.c"	TH=TMR1H;
+00003b   080f     movf    0x0f, 0x0        	MOVF	_TMR1H,W
+00003c   00bd     movwf   0x3d             	MOVWF	r0x1011
+                                           ;	.line	164; "main.c"	TL=TMR1L;
+00003d   080e     movf    0x0e, 0x0        	MOVF	_TMR1L,W
+                                           ;	.line	165; "main.c"	check_generator(TH,TL);
+00003e   00be     movwf   0x3e             	MOVWF	r0x1012
+00003f   00af     movwf   0x2f             	MOVWF	STK00
+000040   083d     movf    0x3d, 0x0        	MOVF	r0x1011,W
+000041   2071     call    0x0071           	CALL	_check_generator
+                                           ;	.line	166; "main.c"	if(rdbit(PTC,4)==1){sensitivity_up();}
+000042   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000043   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000044   3910     andlw   0x10             	ANDLW	0x10
+000045   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000046   3001     movlw   0x01             	MOVLW	0x01
+000047   00bd     movwf   0x3d             	MOVWF	r0x1011
+000048   00be     movwf   0x3e             	MOVWF	r0x1012
+                                           ;	.line	167; "main.c"	if(rdbit(PTC,5)==1){sensitivity_down();}    
+000049   3a01     xorlw   0x01             	XORLW	0x01
+00004a   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+00004b   20ab     call    0x00ab           	CALL	_sensitivity_up
+00004c   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+00004d   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+00004e   3920     andlw   0x20             	ANDLW	0x20
+00004f   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000050   3001     movlw   0x01             	MOVLW	0x01
+000051   00bd     movwf   0x3d             	MOVWF	r0x1011
+000052   00be     movwf   0x3e             	MOVWF	r0x1012
+                                           ;	.line	168; "main.c"	if(rdbit(PTC,3)==1) {
+000053   3a01     xorlw   0x01             	XORLW	0x01
+000054   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+000055   208e     call    0x008e           	CALL	_sensitivity_down
+000056   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000057   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000058   3908     andlw   0x08             	ANDLW	0x08
+000059   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00005a   3001     movlw   0x01             	MOVLW	0x01
+00005b   00bd     movwf   0x3d             	MOVWF	r0x1011
+00005c   00be     movwf   0x3e             	MOVWF	r0x1012
+00005d   3a01     xorlw   0x01             	XORLW	0x01
+00005e   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00005f   280b     goto    0x000b           	GOTO	_00245_DS_
+                                           ;	.line	169; "main.c"	delay_ms(5);                //contact bounce
+000060   3005     movlw   0x05             	MOVLW	0x05
+000061   00af     movwf   0x2f             	MOVWF	STK00
+000062   3000     movlw   0x00             	MOVLW	0x00
+000063   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	170; "main.c"	if(rdbit(PTC,3)==1){
+000064   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000065   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000066   3908     andlw   0x08             	ANDLW	0x08
+000067   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000068   3001     movlw   0x01             	MOVLW	0x01
+000069   00bd     movwf   0x3d             	MOVWF	r0x1011
+00006a   00be     movwf   0x3e             	MOVWF	r0x1012
+00006b   3a01     xorlw   0x01             	XORLW	0x01
+00006c   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00006d   280b     goto    0x000b           	GOTO	_00245_DS_
+                                           ;	.line	171; "main.c"	calibration();
+00006e   20c8     call    0x00c8           	CALL	_calibration
+00006f   280b     goto    0x000b           	GOTO	_00245_DS_
+000070   0008     return                   	RETURN	
+                                           ; exit point of _main
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _check_generator	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _bl_metal
+                                           ;   _dr_metal
+                                           ;   _send_error
+                                           ;   _bl_metal
+                                           ;   _dr_metal
+                                           ;   _send_error
+                                           ;5 compiler assigned registers:
+                                           ;   r0x100D
+                                           ;   STK00
+                                           ;   r0x100E
+                                           ;   r0x100F
+                                           ;   r0x1010
+                                           ;; Starting pCode block
+                                           _check_generator	;Function start
+                                           ; 2 exit points
+                                           ;	.line	121; "main.c"	void check_generator( unsigned char Hbyte, unsigned char Lbyte ){
+000071   00b9     movwf   0x39             	MOVWF	r0x100D
+000072   082f     movf    0x2f, 0x0        	MOVF	STK00,W
+000073   00ba     movwf   0x3a             	MOVWF	r0x100E
+                                           ;	.line	124; "main.c"	buffer_sensetivity = buffer_low;
+000074   084d     movf    0x4d, 0x0        	MOVF	_buffer_low,W
+000075   00bb     movwf   0x3b             	MOVWF	r0x100F
+                                           ;	.line	125; "main.c"	for(i=0;i<sensitivity;i++){
+000076   01bc     clrf    0x3c             	CLRF	r0x1010
+                                           _00234_DS_
+000077   084e     movf    0x4e, 0x0        	MOVF	_sensitivity,W
+000078   023c     subwf   0x3c, 0x0        	SUBWF	r0x1010,W
+000079   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+00007a   287d     goto    0x007d           	GOTO	_00224_DS_
+                                           ;;genSkipc:3247: created from rifx:0x7ffcdee8f150
+00007b   0abc     incf    0x3c, 0x1        	INCF	r0x1010,F
+00007c   2877     goto    0x0077           	GOTO	_00234_DS_
+                                           _00224_DS_
+                                           ;	.line	129; "main.c"	if(Hbyte == buffer_high) {
+00007d   084c     movf    0x4c, 0x0        	MOVF	_buffer_high,W
+00007e   0639     xorwf   0x39, 0x0        	XORWF	r0x100D,W
+00007f   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000080   288c     goto    0x008c           	GOTO	_00232_DS_
+                                           ;	.line	130; "main.c"	if(Lbyte == buffer_sensetivity){
+000081   083b     movf    0x3b, 0x0        	MOVF	r0x100F,W
+                                           ;	.line	131; "main.c"	return;
+000082   063a     xorwf   0x3a, 0x0        	XORWF	r0x100E,W
+                                           ;	.line	133; "main.c"	else if (Lbyte< buffer_low){bl_metal();}
+000083   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+000084   288d     goto    0x008d           	GOTO	_00236_DS_
+000085   084d     movf    0x4d, 0x0        	MOVF	_buffer_low,W
+000086   023a     subwf   0x3a, 0x0        	SUBWF	r0x100E,W
+000087   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+000088   288b     goto    0x008b           	GOTO	_00226_DS_
+                                           ;;genSkipc:3247: created from rifx:0x7ffcdee8f150
+000089   2111     call    0x0111           	CALL	_bl_metal
+00008a   288c     goto    0x008c           	GOTO	_00232_DS_
+                                           _00226_DS_
+                                           ;	.line	134; "main.c"	else {dr_metal();}
+00008b   2122     call    0x0122           	CALL	_dr_metal
+                                           _00232_DS_
+                                           ;	.line	136; "main.c"	send_error();
+00008c   20dc     call    0x00dc           	CALL	_send_error
+                                           _00236_DS_
+00008d   0008     return                   	RETURN	
+                                           ; exit point of _check_generator
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _sensitivity_down	;Function start
+                                           ; 0 exit points
+                                           ;functions called:
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;3 compiler assigned registers:
+                                           ;   STK00
+                                           ;   r0x100A
+                                           ;   r0x100B
+                                           ;; Starting pCode block
+                                           _sensitivity_down	;Function start
+                                           ; 0 exit points
+                                           ;	.line	114; "main.c"	delay_ms(5);
+00008e   3005     movlw   0x05             	MOVLW	0x05
+00008f   00af     movwf   0x2f             	MOVWF	STK00
+000090   3000     movlw   0x00             	MOVLW	0x00
+000091   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	115; "main.c"	if(rdbit(PTC,5)==1 && sensitivity>0){
+000092   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000093   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000094   3920     andlw   0x20             	ANDLW	0x20
+000095   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000096   3001     movlw   0x01             	MOVLW	0x01
+000097   00b6     movwf   0x36             	MOVWF	r0x100A
+000098   00b7     movwf   0x37             	MOVWF	r0x100B
+000099   3a01     xorlw   0x01             	XORLW	0x01
+00009a   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00009b   28a0     goto    0x00a0           	GOTO	_00205_DS_
+00009c   3000     movlw   0x00             	MOVLW	0x00
+                                           ;	.line	116; "main.c"	sensitivity--;
+00009d   044e     iorwf   0x4e, 0x0        	IORWF	_sensitivity,W
+                                           ;	.line	118; "main.c"	while(rdbit(PTC,5)==1);
+00009e   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00009f   03ce     decf    0x4e, 0x1        	DECF	_sensitivity,F
+                                           _00205_DS_
+0000a0   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+0000a1   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+0000a2   3920     andlw   0x20             	ANDLW	0x20
+0000a3   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000a4   3001     movlw   0x01             	MOVLW	0x01
+0000a5   00b6     movwf   0x36             	MOVWF	r0x100A
+0000a6   00b7     movwf   0x37             	MOVWF	r0x100B
+0000a7   3a01     xorlw   0x01             	XORLW	0x01
+0000a8   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+0000a9   28a0     goto    0x00a0           	GOTO	_00205_DS_
+0000aa   0008     return                   	RETURN	
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _sensitivity_up	;Function start
+                                           ; 0 exit points
+                                           ;functions called:
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;3 compiler assigned registers:
+                                           ;   STK00
+                                           ;   r0x100A
+                                           ;   r0x100B
+                                           ;; Starting pCode block
+                                           _sensitivity_up	;Function start
+                                           ; 0 exit points
+                                           ;	.line	107; "main.c"	delay_ms(5);
+0000ab   3005     movlw   0x05             	MOVLW	0x05
+0000ac   00af     movwf   0x2f             	MOVWF	STK00
+0000ad   3000     movlw   0x00             	MOVLW	0x00
+0000ae   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	108; "main.c"	if(rdbit(PTC,4)==1 && sensitivity<5){
+0000af   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+0000b0   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+0000b1   3910     andlw   0x10             	ANDLW	0x10
+0000b2   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000b3   3001     movlw   0x01             	MOVLW	0x01
+0000b4   00b6     movwf   0x36             	MOVWF	r0x100A
+0000b5   00b7     movwf   0x37             	MOVWF	r0x100B
+0000b6   3a01     xorlw   0x01             	XORLW	0x01
+0000b7   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000b8   28bd     goto    0x00bd           	GOTO	_00182_DS_
+                                           ;;unsigned compare: left < lit(0x5=5), size=1
+0000b9   3005     movlw   0x05             	MOVLW	0x05
+                                           ;	.line	109; "main.c"	sensitivity++;
+0000ba   024e     subwf   0x4e, 0x0        	SUBWF	_sensitivity,W
+                                           ;	.line	111; "main.c"	while(rdbit(PTC,4)==1);
+0000bb   1c03     btfss   0x03, 0x0        	BTFSS	STATUS,0
+0000bc   0ace     incf    0x4e, 0x1        	INCF	_sensitivity,F
+                                           _00182_DS_
+0000bd   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+0000be   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+0000bf   3910     andlw   0x10             	ANDLW	0x10
+0000c0   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000c1   3001     movlw   0x01             	MOVLW	0x01
+0000c2   00b6     movwf   0x36             	MOVWF	r0x100A
+0000c3   00b7     movwf   0x37             	MOVWF	r0x100B
+0000c4   3a01     xorlw   0x01             	XORLW	0x01
+0000c5   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+0000c6   28bd     goto    0x00bd           	GOTO	_00182_DS_
+0000c7   0008     return                   	RETURN	
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _calibration	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;; Starting pCode block
+                                           _calibration	;Function start
+                                           ; 2 exit points
+                                           ;	.line	93; "main.c"	INTF=0;
+0000c8   1283     bcf     0x03, 0x5        	BANKSEL	_INTCONbits
+0000c9   108b     bcf     0x0b, 0x1        	BCF	_INTCONbits,1
+                                           _00171_DS_
+                                           ;	.line	94; "main.c"	while(INTF==0);                         //wait for rising edge generator
+0000ca   1283     bcf     0x03, 0x5        	BANKSEL	_INTCONbits
+0000cb   1c8b     btfss   0x0b, 0x1        	BTFSS	_INTCONbits,1
+0000cc   28ca     goto    0x00ca           	GOTO	_00171_DS_
+                                           ;	.line	95; "main.c"	TMR1ON=1;
+0000cd   1410     bsf     0x10, 0x0        	BSF	_T1CONbits,0
+                                           ;	.line	96; "main.c"	INTF =0;
+0000ce   108b     bcf     0x0b, 0x1        	BCF	_INTCONbits,1
+                                           _00174_DS_
+                                           ;	.line	97; "main.c"	while(INTF==0);
+0000cf   1283     bcf     0x03, 0x5        	BANKSEL	_INTCONbits
+0000d0   1c8b     btfss   0x0b, 0x1        	BTFSS	_INTCONbits,1
+0000d1   28cf     goto    0x00cf           	GOTO	_00174_DS_
+                                           ;	.line	98; "main.c"	TMR1ON=0;
+0000d2   1010     bcf     0x10, 0x0        	BCF	_T1CONbits,0
+                                           ;	.line	99; "main.c"	buffer_high = TMR1H;
+0000d3   080f     movf    0x0f, 0x0        	MOVF	_TMR1H,W
+0000d4   00cc     movwf   0x4c             	MOVWF	_buffer_high
+                                           ;	.line	100; "main.c"	buffer_low = TMR1L;
+0000d5   080e     movf    0x0e, 0x0        	MOVF	_TMR1L,W
+0000d6   00cd     movwf   0x4d             	MOVWF	_buffer_low
+                                           ;	.line	101; "main.c"	TMR1L=0;
+0000d7   018e     clrf    0x0e             	CLRF	_TMR1L
+                                           ;	.line	102; "main.c"	TMR1H=0;
+0000d8   018f     clrf    0x0f             	CLRF	_TMR1H
+                                           ;	.line	103; "main.c"	calibration_complete=1;
+0000d9   3001     movlw   0x01             	MOVLW	0x01
+0000da   00cb     movwf   0x4b             	MOVWF	_calibration_complete
+0000db   0008     return                   	RETURN	
+                                           ; exit point of _calibration
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _send_error	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _send_signal
+                                           ;   _delay_ms
+                                           ;   _send_signal
+                                           ;   _delay_ms
+                                           ;3 compiler assigned registers:
+                                           ;   r0x100B
+                                           ;   r0x100C
+                                           ;   STK00
+                                           ;; Starting pCode block
+                                           _send_error	;Function start
+                                           ; 2 exit points
+                                           ;	.line	85; "main.c"	while(j<100) {
+0000dc   01b7     clrf    0x37             	CLRF	r0x100B
+0000dd   01b8     clrf    0x38             	CLRF	r0x100C
+                                           ;;unsigned compare: left < lit(0x64=100), size=2
+                                           _00154_DS_
+0000de   3000     movlw   0x00             	MOVLW	0x00
+0000df   0238     subwf   0x38, 0x0        	SUBWF	r0x100C,W
+0000e0   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+0000e1   28e4     goto    0x00e4           	GOTO	_00166_DS_
+0000e2   3064     movlw   0x64             	MOVLW	0x64
+0000e3   0237     subwf   0x37, 0x0        	SUBWF	r0x100B,W
+                                           _00166_DS_
+0000e4   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+0000e5   28eb     goto    0x00eb           	GOTO	_00156_DS_
+                                           ;;genSkipc:3247: created from rifx:0x7ffcdee8f150
+                                           ;	.line	86; "main.c"	send_signal();
+0000e6   2100     call    0x0100           	CALL	_send_signal
+                                           ;	.line	87; "main.c"	j++;
+0000e7   0ab7     incf    0x37, 0x1        	INCF	r0x100B,F
+0000e8   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+0000e9   0ab8     incf    0x38, 0x1        	INCF	r0x100C,F
+0000ea   28de     goto    0x00de           	GOTO	_00154_DS_
+                                           _00156_DS_
+                                           ;	.line	89; "main.c"	delay_ms(1000);
+0000eb   30e8     movlw   0xe8             	MOVLW	0xe8
+0000ec   00af     movwf   0x2f             	MOVWF	STK00
+0000ed   3003     movlw   0x03             	MOVLW	0x03
+0000ee   2133     call    0x0133           	CALL	_delay_ms
+0000ef   0008     return                   	RETURN	
+                                           ; exit point of _send_error
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _TIMER_CONFIG	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;; Starting pCode block
+                                           _TIMER_CONFIG	;Function start
+                                           ; 2 exit points
+                                           ;	.line	78; "main.c"	T1CON = 0;
+0000f0   1283     bcf     0x03, 0x5        	BANKSEL	_T1CON
+0000f1   0190     clrf    0x10             	CLRF	_T1CON
+                                           ;	.line	79; "main.c"	TMR1H = 0;
+0000f2   018f     clrf    0x0f             	CLRF	_TMR1H
+                                           ;	.line	80; "main.c"	TMR1L = 0;
+0000f3   018e     clrf    0x0e             	CLRF	_TMR1L
+0000f4   0008     return                   	RETURN	
+                                           ; exit point of _TIMER_CONFIG
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _PORT_CONFIG	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;; Starting pCode block
+                                           _PORT_CONFIG	;Function start
+                                           ; 2 exit points
+                                           ;	.line	72; "main.c"	TRC = 0b00011000;
+0000f5   3018     movlw   0x18             	MOVLW	0x18
+0000f6   1683     bsf     0x03, 0x5        	BANKSEL	_TRISC
+0000f7   0087     movwf   0x07             	MOVWF	_TRISC
+                                           ;	.line	73; "main.c"	PTC = 0;
+0000f8   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+0000f9   0187     clrf    0x07             	CLRF	_PORTC
+                                           ;	.line	74; "main.c"	TRA = 0b00000100;
+0000fa   3004     movlw   0x04             	MOVLW	0x04
+0000fb   1683     bsf     0x03, 0x5        	BANKSEL	_TRISA
+0000fc   0085     movwf   0x05             	MOVWF	_TRISA
+                                           ;	.line	75; "main.c"	PTA = 0;
+0000fd   1283     bcf     0x03, 0x5        	BANKSEL	_PORTA
+0000fe   0185     clrf    0x05             	CLRF	_PORTA
+0000ff   0008     return                   	RETURN	
+                                           ; exit point of _PORT_CONFIG
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _send_signal	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;2 compiler assigned registers:
+                                           ;   STK00
+                                           ;   r0x100A
+                                           ;; Starting pCode block
+                                           _send_signal	;Function start
+                                           ; 2 exit points
+                                           ;	.line	65; "main.c"	setbit(PTC,0);
+000100   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000101   1407     bsf     0x07, 0x0        	BSF	_PORTC,0
+                                           ;	.line	66; "main.c"	delay_ms(5);
+000102   3005     movlw   0x05             	MOVLW	0x05
+000103   00af     movwf   0x2f             	MOVWF	STK00
+000104   3000     movlw   0x00             	MOVLW	0x00
+000105   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	67; "main.c"	clrbit(PTC,0);
+000106   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000107   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000108   00b6     movwf   0x36             	MOVWF	r0x100A
+000109   30fe     movlw   0xfe             	MOVLW	0xfe
+00010a   0536     andwf   0x36, 0x0        	ANDWF	r0x100A,W
+00010b   0087     movwf   0x07             	MOVWF	_PORTC
+                                           ;	.line	68; "main.c"	delay_ms(5);
+00010c   3005     movlw   0x05             	MOVLW	0x05
+00010d   00af     movwf   0x2f             	MOVWF	STK00
+00010e   3000     movlw   0x00             	MOVLW	0x00
+00010f   2133     call    0x0133           	CALL	_delay_ms
+000110   0008     return                   	RETURN	
+                                           ; exit point of _send_signal
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _bl_metal	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;2 compiler assigned registers:
+                                           ;   STK00
+                                           ;   r0x100A
+                                           ;; Starting pCode block
+                                           _bl_metal	;Function start
+                                           ; 2 exit points
+                                           ;	.line	59; "main.c"	setbit(PTC,0);
+000111   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000112   1407     bsf     0x07, 0x0        	BSF	_PORTC,0
+                                           ;	.line	60; "main.c"	delay_ms(1);
+000113   3001     movlw   0x01             	MOVLW	0x01
+000114   00af     movwf   0x2f             	MOVWF	STK00
+000115   3000     movlw   0x00             	MOVLW	0x00
+000116   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	61; "main.c"	clrbit(PTC,0);
+000117   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000118   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+000119   00b6     movwf   0x36             	MOVWF	r0x100A
+00011a   30fe     movlw   0xfe             	MOVLW	0xfe
+00011b   0536     andwf   0x36, 0x0        	ANDWF	r0x100A,W
+00011c   0087     movwf   0x07             	MOVWF	_PORTC
+                                           ;	.line	62; "main.c"	delay_ms(1);
+00011d   3001     movlw   0x01             	MOVLW	0x01
+00011e   00af     movwf   0x2f             	MOVWF	STK00
+00011f   3000     movlw   0x00             	MOVLW	0x00
+000120   2133     call    0x0133           	CALL	_delay_ms
+000121   0008     return                   	RETURN	
+                                           ; exit point of _bl_metal
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _dr_metal	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;functions called:
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;   _delay_ms
+                                           ;2 compiler assigned registers:
+                                           ;   STK00
+                                           ;   r0x100A
+                                           ;; Starting pCode block
+                                           _dr_metal	;Function start
+                                           ; 2 exit points
+                                           ;	.line	53; "main.c"	setbit(PTC,0);
+000122   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000123   1407     bsf     0x07, 0x0        	BSF	_PORTC,0
+                                           ;	.line	54; "main.c"	delay_ms(20);
+000124   3014     movlw   0x14             	MOVLW	0x14
+000125   00af     movwf   0x2f             	MOVWF	STK00
+000126   3000     movlw   0x00             	MOVLW	0x00
+000127   2133     call    0x0133           	CALL	_delay_ms
+                                           ;	.line	55; "main.c"	clrbit(PTC,0);
+000128   1283     bcf     0x03, 0x5        	BANKSEL	_PORTC
+000129   0807     movf    0x07, 0x0        	MOVF	_PORTC,W
+00012a   00b6     movwf   0x36             	MOVWF	r0x100A
+00012b   30fe     movlw   0xfe             	MOVLW	0xfe
+00012c   0536     andwf   0x36, 0x0        	ANDWF	r0x100A,W
+00012d   0087     movwf   0x07             	MOVWF	_PORTC
+                                           ;	.line	56; "main.c"	delay_ms(20);
+00012e   3014     movlw   0x14             	MOVLW	0x14
+00012f   00af     movwf   0x2f             	MOVWF	STK00
+000130   3000     movlw   0x00             	MOVLW	0x00
+000131   2133     call    0x0133           	CALL	_delay_ms
+000132   0008     return                   	RETURN	
+                                           ; exit point of _dr_metal
+                                           
+                                           ;***
+                                           ;  pBlock Stats: dbName = C
+                                           ;***
+                                           ;entry:  _delay_ms	;Function start
+                                           ; 2 exit points
+                                           ;has an exit
+                                           ;7 compiler assigned registers:
+                                           ;   r0x1004
+                                           ;   STK00
+                                           ;   r0x1005
+                                           ;   r0x1006
+                                           ;   r0x1007
+                                           ;   r0x1008
+                                           ;   r0x1009
+                                           ;; Starting pCode block
+                                           _delay_ms	;Function start
+                                           ; 2 exit points
+                                           ;	.line	41; "main.c"	void delay_ms ( unsigned int ms) {
+000133   00b1     movwf   0x31             	MOVWF	r0x1004
+000134   082f     movf    0x2f, 0x0        	MOVF	STK00,W
+000135   00b0     movwf   0x30             	MOVWF	r0x1005
+                                           ;	.line	45; "main.c"	for(i=0;i<ms;i++){
+000136   01b2     clrf    0x32             	CLRF	r0x1006
+000137   01b3     clrf    0x33             	CLRF	r0x1007
+                                           _00110_DS_
+000138   0831     movf    0x31, 0x0        	MOVF	r0x1004,W
+000139   0233     subwf   0x33, 0x0        	SUBWF	r0x1007,W
+00013a   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+00013b   293e     goto    0x013e           	GOTO	_00128_DS_
+00013c   0830     movf    0x30, 0x0        	MOVF	r0x1005,W
+00013d   0232     subwf   0x32, 0x0        	SUBWF	r0x1006,W
+                                           _00128_DS_
+00013e   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+00013f   2952     goto    0x0152           	GOTO	_00112_DS_
+                                           ;;genSkipc:3247: created from rifx:0x7ffcdee8f150
+                                           ;	.line	47; "main.c"	while(j<timerBuffer/50){j++;}
+000140   01b4     clrf    0x34             	CLRF	r0x1008
+000141   01b5     clrf    0x35             	CLRF	r0x1009
+                                           ;;unsigned compare: left < lit(0x190=400), size=2
+                                           _00105_DS_
+000142   3001     movlw   0x01             	MOVLW	0x01
+000143   0235     subwf   0x35, 0x0        	SUBWF	r0x1009,W
+000144   1d03     btfss   0x03, 0x2        	BTFSS	STATUS,2
+000145   2948     goto    0x0148           	GOTO	_00129_DS_
+000146   3090     movlw   0x90             	MOVLW	0x90
+000147   0234     subwf   0x34, 0x0        	SUBWF	r0x1008,W
+                                           _00129_DS_
+000148   1803     btfsc   0x03, 0x0        	BTFSC	STATUS,0
+000149   294e     goto    0x014e           	GOTO	_00111_DS_
+                                           ;;genSkipc:3247: created from rifx:0x7ffcdee8f150
+00014a   0ab4     incf    0x34, 0x1        	INCF	r0x1008,F
+00014b   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+00014c   0ab5     incf    0x35, 0x1        	INCF	r0x1009,F
+00014d   2942     goto    0x0142           	GOTO	_00105_DS_
+                                           _00111_DS_
+                                           ;	.line	45; "main.c"	for(i=0;i<ms;i++){
+00014e   0ab2     incf    0x32, 0x1        	INCF	r0x1006,F
+00014f   1903     btfsc   0x03, 0x2        	BTFSC	STATUS,2
+000150   0ab3     incf    0x33, 0x1        	INCF	r0x1007,F
+000151   2938     goto    0x0138           	GOTO	_00110_DS_
+                                           _00112_DS_
+000152   0008     return                   	RETURN	
+                                           ; exit point of _delay_ms
+                                           
+                                           
+                                           ;	code size estimation:
+                                           ;	  308+   29 =   337 instructions (  732 byte)
+                                           
+                                           	end
+                                                   LIST
+                                           
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F877 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+                                           
+                                                   NOLIST
+                                                   LIST
+                                           
+                                           ;==========================================================================
+                                           ; Build date : Oct 21 2015
+                                           ;  MPASM PIC16F630 processor include
+                                           ; 
+                                           ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                                           ;==========================================================================
+                                           
+                                                   NOLIST
