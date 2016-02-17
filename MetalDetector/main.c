@@ -1,7 +1,7 @@
 /*
-PTC.3 - calibration
+PTC.3 - sensitivity down
 PTC.4 - sensitivity up
-PTC.5 - sensitivity down
+PTC.5 - calibration
 PTC.0 - speaker
 PTC.1 - led red
 PIC.2 - led green
@@ -62,29 +62,14 @@ void bl_metal(){
     clrbit(PTC,0);
     delay_ms(1);
 }
-void send_signal(){
-    setbit(PTC,0);
-    delay_ms(5);
-    clrbit(PTC,0);
-    delay_ms(5);
-}
-//**************************
-void PORT_CONFIG(){
-    TRC = 0b00111000;
-    PTC = 0;
-    TRA = 0b00000100;
-    PTA = 0;
-}
-void TIMER_CONFIG(){
-    T1CON = 0;
-    TMR1H = 0;
-    TMR1L = 0;
-}
 //**************************
 void send_error () {
    unsigned int j =0;
    while(j<100) {
-        send_signal();
+        setbit(PTC,0);
+        delay_ms(10);
+        clrbit(PTC,0);
+        delay_ms(10);
         j++;
    }
    delay_ms(1000);
@@ -109,6 +94,7 @@ void sensitivity_up(){
         if(rdbit(PTC,4)==1 && sensitivity<5){
             sensitivity++;
         }
+        delay_ms(5);
         while(rdbit(PTC,4)==1);
 }
 void sensitivity_down(){
@@ -116,36 +102,37 @@ void sensitivity_down(){
         if(rdbit(PTC,5)==1 && sensitivity>0){
             sensitivity--;
         }
+        delay_ms(5);
         while(rdbit(PTC,5)==1);
 }
 
 void check_generator( unsigned char Hbyte, unsigned char Lbyte ){
     unsigned char buffer_sensetivity;
+    unsigned char buffer_timer;
     unsigned char i;
     buffer_sensetivity = buffer_low;
+    buffer_timer = Lbyte;
     for(i=0;i<sensitivity;i++){
         buffer_sensetivity >> 1;
-        Lbyte >>1;
+        buffer_timer >>1;
     }
-    if(Hbyte == buffer_high) {
-        if(Lbyte == buffer_sensetivity){
-            return;
-        }
-        else if (Lbyte< buffer_low){bl_metal();}
-        else {dr_metal();}
-    }
-    send_error();
+    if(Hbyte != buffer_high){send_error();}
+    if(buffer_timer<buffer_sensetivity){dr_metal();}
+    if(buffer_timer>buffer_sensetivity){bl_metal();}
 }
 //**************************
 void main() {
     unsigned char TH;
     unsigned char TL;
-    PORT_CONFIG();
-    TIMER_CONFIG();
+    T1CON = 0;
+    TMR1H = 0;
+    TMR1L = 0;
+    TRC = 0b00111000;
+    PTC = 0;
+    TRA = 0b00000100;
+    PTA = 0;
     setbit(PTC,1);                              // no calibration LED_RED
-    clrbit(PTC,2);
-	while(1) {                                  //wait for calibration
-            while (calibration_complete==0) {
+	while (calibration_complete==0) {           //wait for calibration
                 if (rdbit(PTC,3)==1){
                         delay_ms(5);            //contact bounce
                         if(rdbit(PTC,3)==1){
@@ -156,6 +143,7 @@ void main() {
                 }
                 while(rdbit(PTC,3)==1);
             }
+	while(1) {
             INTF=0;                             //start detect
             while (INTF==0);
             TMR1ON =1;
