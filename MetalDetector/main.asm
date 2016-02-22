@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by SDCC : free open source ANSI-C Compiler
 ; Version 3.5.0 #9253 (Jan 11 2016) (Linux)
-; This file was generated Wed Feb 17 11:46:45 2016
+; This file was generated Mon Feb 22 16:44:48 2016
 ;--------------------------------------------------------
 ; PIC port for the 14-bit core
 ;--------------------------------------------------------
@@ -26,8 +26,6 @@
 	extern	_gets
 	extern	_getchar
 	extern	_putchar
-	extern	_PORT_CONFIG
-	extern	_TIMER_CONFIG
 	extern	_send_signal
 	extern	_STATUSbits
 	extern	_PORTAbits
@@ -88,6 +86,7 @@
 	global	_sensitivity_up
 	global	_calibration
 	global	_send_error
+	global	_delay_us
 	global	_delay_ms
 	global	_dr_metal
 	global	_bl_metal
@@ -166,6 +165,8 @@ r0x100F	res	1
 r0x1010	res	1
 r0x1011	res	1
 r0x1012	res	1
+r0x1013	res	1
+r0x1014	res	1
 ;--------------------------------------------------------
 ; initialized data
 ;--------------------------------------------------------
@@ -211,174 +212,195 @@ code_main	code
 ;   _delay_ms
 ;   _calibration
 ;3 compiler assigned registers:
-;   r0x1011
-;   r0x1012
+;   r0x1013
+;   r0x1014
 ;   STK00
 ;; Starting pCode block
 _main	;Function start
 ; 2 exit points
-;	.line	127; "main.c"	T1CON = 0;
+;	.line	134; "main.c"	T1CON = 0;
 	BANKSEL	_T1CON
 	CLRF	_T1CON
-;	.line	128; "main.c"	TMR1H = 0;
+;	.line	135; "main.c"	TMR1H = 0;
 	CLRF	_TMR1H
-;	.line	129; "main.c"	TMR1L = 0;
+;	.line	136; "main.c"	TMR1L = 0;
 	CLRF	_TMR1L
-;	.line	130; "main.c"	TRC = 0b00111000;
+;	.line	137; "main.c"	TRC = 0b00111000;
 	MOVLW	0x38
 	BANKSEL	_TRISC
 	MOVWF	_TRISC
-;	.line	131; "main.c"	PTC = 0;
+;	.line	138; "main.c"	PTC = 0;
 	BANKSEL	_PORTC
 	CLRF	_PORTC
-;	.line	132; "main.c"	TRA = 0b00000100;
+;	.line	139; "main.c"	TRA = 0b00000100;
 	MOVLW	0x04
 	BANKSEL	_TRISA
 	MOVWF	_TRISA
-;	.line	133; "main.c"	PTA = 0;
+;	.line	140; "main.c"	PTA = 0;
 	BANKSEL	_PORTA
 	CLRF	_PORTA
-;	.line	134; "main.c"	setbit(PTC,1);                              // no calibration LED_RED
+;	.line	141; "main.c"	setbit(PTC,1);                              // no calibration LED_RED
 	BSF	_PORTC,1
-_00253_DS_
-;	.line	135; "main.c"	while (calibration_complete==0) {           //wait for calibration
+_00282_DS_
+;	.line	143; "main.c"	while (calibration_complete==0) {           //wait for calibration
 	MOVLW	0x00
 	IORWF	_calibration_complete,W
 	BTFSS	STATUS,2
-	GOTO	_00271_DS_
-;	.line	136; "main.c"	if (rdbit(PTC,3)==1){
-	BANKSEL	_PORTC
-	MOVF	_PORTC,W
-	ANDLW	0x08
-	BTFSS	STATUS,2
-	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
-	XORLW	0x01
-	BTFSS	STATUS,2
-	GOTO	_00250_DS_
-;	.line	137; "main.c"	delay_ms(5);            //contact bounce
-	MOVLW	0x05
-	MOVWF	STK00
-	MOVLW	0x00
-	CALL	_delay_ms
-;	.line	138; "main.c"	if(rdbit(PTC,3)==1){
-	BANKSEL	_PORTC
-	MOVF	_PORTC,W
-	ANDLW	0x08
-	BTFSS	STATUS,2
-	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
-	XORLW	0x01
-	BTFSS	STATUS,2
-	GOTO	_00250_DS_
-;	.line	139; "main.c"	calibration();
-	CALL	_calibration
-;	.line	140; "main.c"	setbit(PTC,2);  //set LED_GREEN
-	BANKSEL	_PORTC
-	BSF	_PORTC,2
-;	.line	141; "main.c"	clrbit(PTC,1);
-	MOVF	_PORTC,W
-	MOVWF	r0x1011
-	MOVLW	0xfd
-	ANDWF	r0x1011,W
-	MOVWF	_PORTC
-_00250_DS_
-;	.line	144; "main.c"	while(rdbit(PTC,3)==1);
-	BANKSEL	_PORTC
-	MOVF	_PORTC,W
-	ANDLW	0x08
-	BTFSS	STATUS,2
-	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
-	XORLW	0x01
-	BTFSS	STATUS,2
-	GOTO	_00253_DS_
-	GOTO	_00250_DS_
-_00271_DS_
-;	.line	147; "main.c"	INTF=0;                             //start detect
-	BANKSEL	_INTCONbits
-	BCF	_INTCONbits,1
-_00256_DS_
-;	.line	148; "main.c"	while (INTF==0);
-	BANKSEL	_INTCONbits
-	BTFSS	_INTCONbits,1
-	GOTO	_00256_DS_
-;	.line	149; "main.c"	TMR1ON =1;
-	BSF	_T1CONbits,0
-;	.line	150; "main.c"	INTF=0;
-	BCF	_INTCONbits,1
-_00259_DS_
-;	.line	151; "main.c"	while (INTF==0);
-	BANKSEL	_INTCONbits
-	BTFSS	_INTCONbits,1
-	GOTO	_00259_DS_
-;	.line	152; "main.c"	TMR1ON=0;
-	BCF	_T1CONbits,0
-;	.line	153; "main.c"	TH=TMR1H;
-	MOVF	_TMR1H,W
-	MOVWF	r0x1011
-;	.line	154; "main.c"	TL=TMR1L;
-	MOVF	_TMR1L,W
-;	.line	155; "main.c"	check_generator(TH,TL);
-	MOVWF	r0x1012
-	MOVWF	STK00
-	MOVF	r0x1011,W
-	CALL	_check_generator
-;	.line	156; "main.c"	if(rdbit(PTC,4)==1){sensitivity_up();}
-	BANKSEL	_PORTC
-	MOVF	_PORTC,W
-	ANDLW	0x10
-	BTFSS	STATUS,2
-	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
-;	.line	157; "main.c"	if(rdbit(PTC,5)==1){sensitivity_down();}
-	XORLW	0x01
-	BTFSC	STATUS,2
-	CALL	_sensitivity_up
+	GOTO	_00302_DS_
+;	.line	144; "main.c"	if (rdbit(PTC,5)==1){
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
 	ANDLW	0x20
 	BTFSS	STATUS,2
 	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
-;	.line	158; "main.c"	if(rdbit(PTC,3)==1) {
+	MOVWF	r0x1013
+	MOVWF	r0x1014
+	XORLW	0x01
+	BTFSS	STATUS,2
+	GOTO	_00279_DS_
+;	.line	145; "main.c"	delay_ms(5);            //contact bounce
+	MOVLW	0x05
+	MOVWF	STK00
+	MOVLW	0x00
+	CALL	_delay_ms
+;	.line	146; "main.c"	if(rdbit(PTC,5)==1){
+	BANKSEL	_PORTC
+	MOVF	_PORTC,W
+	ANDLW	0x20
+	BTFSS	STATUS,2
+	MOVLW	0x01
+	MOVWF	r0x1013
+	MOVWF	r0x1014
+	XORLW	0x01
+	BTFSS	STATUS,2
+	GOTO	_00279_DS_
+;	.line	147; "main.c"	calibration();
+	CALL	_calibration
+;	.line	148; "main.c"	setbit(PTC,2);  //set LED_GREEN
+	BANKSEL	_PORTC
+	BSF	_PORTC,2
+;	.line	149; "main.c"	clrbit(PTC,1);
+	MOVF	_PORTC,W
+	MOVWF	r0x1013
+	MOVLW	0xfd
+	ANDWF	r0x1013,W
+	MOVWF	_PORTC
+_00279_DS_
+;	.line	152; "main.c"	while(rdbit(PTC,5)==1);
+	BANKSEL	_PORTC
+	MOVF	_PORTC,W
+	ANDLW	0x20
+	BTFSS	STATUS,2
+	MOVLW	0x01
+	MOVWF	r0x1013
+	MOVWF	r0x1014
+	XORLW	0x01
+	BTFSS	STATUS,2
+	GOTO	_00282_DS_
+	GOTO	_00279_DS_
+_00302_DS_
+;	.line	154; "main.c"	while(calibration_complete ==1) {
+	MOVF	_calibration_complete,W
+	XORLW	0x01
+	BTFSS	STATUS,2
+	GOTO	_00282_DS_
+;	.line	155; "main.c"	INTF=0;                             //start detect
+	BANKSEL	_INTCONbits
+	BCF	_INTCONbits,1
+_00285_DS_
+;	.line	156; "main.c"	while (INTF==0);
+	BANKSEL	_INTCONbits
+	BTFSS	_INTCONbits,1
+	GOTO	_00285_DS_
+;	.line	157; "main.c"	TMR1ON =1;
+	BSF	_T1CONbits,0
+;	.line	158; "main.c"	INTF=0;
+	BCF	_INTCONbits,1
+_00288_DS_
+;	.line	159; "main.c"	while (INTF==0);
+	BANKSEL	_INTCONbits
+	BTFSS	_INTCONbits,1
+	GOTO	_00288_DS_
+;	.line	160; "main.c"	TMR1ON=0;
+	BCF	_T1CONbits,0
+;	.line	161; "main.c"	TH=TMR1H;
+	MOVF	_TMR1H,W
+	MOVWF	r0x1013
+;	.line	162; "main.c"	TL=TMR1L;
+	MOVF	_TMR1L,W
+;	.line	163; "main.c"	check_generator(TH,TL);
+	MOVWF	r0x1014
+	MOVWF	STK00
+	MOVF	r0x1013,W
+	CALL	_check_generator
+;	.line	164; "main.c"	TMR1L=0;
+	BANKSEL	_TMR1L
+	CLRF	_TMR1L
+;	.line	165; "main.c"	TMR1H=0;
+	CLRF	_TMR1H
+;	.line	166; "main.c"	if(rdbit(PTC,4)==1){sensitivity_up();}
+	MOVF	_PORTC,W
+	ANDLW	0x10
+	BTFSS	STATUS,2
+	MOVLW	0x01
+	MOVWF	r0x1013
+	MOVWF	r0x1014
+;	.line	167; "main.c"	if(rdbit(PTC,3)==1){sensitivity_down();}
+	XORLW	0x01
+	BTFSC	STATUS,2
+	CALL	_sensitivity_up
+	BANKSEL	_PORTC
+	MOVF	_PORTC,W
+	ANDLW	0x08
+	BTFSS	STATUS,2
+	MOVLW	0x01
+	MOVWF	r0x1013
+	MOVWF	r0x1014
+;	.line	168; "main.c"	if(rdbit(PTC,5)==1) {
 	XORLW	0x01
 	BTFSC	STATUS,2
 	CALL	_sensitivity_down
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
-	ANDLW	0x08
+	ANDLW	0x20
 	BTFSS	STATUS,2
 	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
+	MOVWF	r0x1013
+	MOVWF	r0x1014
 	XORLW	0x01
 	BTFSS	STATUS,2
-	GOTO	_00271_DS_
-;	.line	159; "main.c"	delay_ms(5);                //contact bounce
+	GOTO	_00302_DS_
+;	.line	169; "main.c"	delay_ms(5);                //contact bounce
 	MOVLW	0x05
 	MOVWF	STK00
 	MOVLW	0x00
 	CALL	_delay_ms
-;	.line	160; "main.c"	if(rdbit(PTC,3)==1){
+;	.line	170; "main.c"	if(rdbit(PTC,5)==1){
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
-	ANDLW	0x08
+	ANDLW	0x20
 	BTFSS	STATUS,2
 	MOVLW	0x01
-	MOVWF	r0x1011
-	MOVWF	r0x1012
+	MOVWF	r0x1013
+	MOVWF	r0x1014
 	XORLW	0x01
 	BTFSS	STATUS,2
-	GOTO	_00271_DS_
-;	.line	161; "main.c"	calibration();
+	GOTO	_00302_DS_
+;	.line	171; "main.c"	calibration();
 	CALL	_calibration
-	GOTO	_00271_DS_
+_00295_DS_
+;	.line	172; "main.c"	while(rdbit(PTC,5)==1);
+	BANKSEL	_PORTC
+	MOVF	_PORTC,W
+	ANDLW	0x20
+	BTFSS	STATUS,2
+	MOVLW	0x01
+	MOVWF	r0x1013
+	MOVWF	r0x1014
+	XORLW	0x01
+	BTFSC	STATUS,2
+	GOTO	_00295_DS_
+	GOTO	_00302_DS_
 	RETURN	
 ; exit point of _main
 
@@ -395,45 +417,45 @@ _00259_DS_
 ;   _dr_metal
 ;   _bl_metal
 ;5 compiler assigned registers:
-;   r0x100D
-;   STK00
-;   r0x100E
 ;   r0x100F
+;   STK00
 ;   r0x1010
+;   r0x1011
+;   r0x1012
 ;; Starting pCode block
 _check_generator	;Function start
 ; 0 exit points
-;	.line	109; "main.c"	void check_generator( unsigned char Hbyte, unsigned char Lbyte ){
-	MOVWF	r0x100D
-	MOVF	STK00,W
-	MOVWF	r0x100E
-;	.line	113; "main.c"	buffer_sensetivity = buffer_low;
-	MOVF	_buffer_low,W
+;	.line	116; "main.c"	void check_generator( unsigned char Hbyte, unsigned char Lbyte ){
 	MOVWF	r0x100F
-;	.line	115; "main.c"	for(i=0;i<sensitivity;i++){
-	CLRF	r0x1010
-_00220_DS_
+	MOVF	STK00,W
+	MOVWF	r0x1010
+;	.line	120; "main.c"	buffer_sensetivity = buffer_low;
+	MOVF	_buffer_low,W
+	MOVWF	r0x1011
+;	.line	122; "main.c"	for(i=0;i<sensitivity;i++){
+	CLRF	r0x1012
+_00249_DS_
 	MOVF	_sensitivity,W
-	SUBWF	r0x1010,W
+	SUBWF	r0x1012,W
 	BTFSC	STATUS,0
-	GOTO	_00212_DS_
-;;genSkipc:3247: created from rifx:0x7ffc9084bb80
-	INCF	r0x1010,F
-	GOTO	_00220_DS_
-_00212_DS_
-;	.line	119; "main.c"	if(Hbyte != buffer_high){send_error();}
+	GOTO	_00241_DS_
+;;genSkipc:3247: created from rifx:0x7ffd7ce78fd0
+	INCF	r0x1012,F
+	GOTO	_00249_DS_
+_00241_DS_
+;	.line	126; "main.c"	if(Hbyte != buffer_high){send_error();}
 	MOVF	_buffer_high,W
-;	.line	120; "main.c"	if(buffer_timer<buffer_sensetivity){dr_metal();}
-	XORWF	r0x100D,W
+;	.line	127; "main.c"	if(buffer_timer<buffer_sensetivity){dr_metal();}
+	XORWF	r0x100F,W
 	BTFSS	STATUS,2
 	CALL	_send_error
-	MOVF	r0x100F,W
-;	.line	121; "main.c"	if(buffer_timer>buffer_sensetivity){bl_metal();}
-	SUBWF	r0x100E,W
+	MOVF	r0x1011,W
+;	.line	128; "main.c"	if(buffer_timer>buffer_sensetivity){bl_metal();}
+	SUBWF	r0x1010,W
 	BTFSS	STATUS,0
 	CALL	_dr_metal
-	MOVF	r0x100E,W
-	SUBWF	r0x100F,W
+	MOVF	r0x1010,W
+	SUBWF	r0x1011,W
 	BTFSS	STATUS,0
 	CALL	_bl_metal
 	RETURN	
@@ -455,45 +477,45 @@ _00212_DS_
 ;; Starting pCode block
 _sensitivity_down	;Function start
 ; 0 exit points
-;	.line	101; "main.c"	delay_ms(5);
+;	.line	108; "main.c"	delay_ms(5);
 	MOVLW	0x05
 	MOVWF	STK00
 	MOVLW	0x00
 	CALL	_delay_ms
-;	.line	102; "main.c"	if(rdbit(PTC,5)==1 && sensitivity>0){
+;	.line	109; "main.c"	if(rdbit(PTC,3)==1 && sensitivity > 0){
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
-	ANDLW	0x20
+	ANDLW	0x08
 	BTFSS	STATUS,2
 	MOVLW	0x01
 	MOVWF	r0x100A
 	MOVWF	r0x100B
 	XORLW	0x01
 	BTFSS	STATUS,2
-	GOTO	_00191_DS_
+	GOTO	_00220_DS_
 	MOVLW	0x00
-;	.line	103; "main.c"	sensitivity--;
+;	.line	110; "main.c"	sensitivity--;
 	IORWF	_sensitivity,W
-;	.line	105; "main.c"	delay_ms(5);
+;	.line	112; "main.c"	delay_ms(5);
 	BTFSS	STATUS,2
 	DECF	_sensitivity,F
-_00191_DS_
+_00220_DS_
 	MOVLW	0x05
 	MOVWF	STK00
 	MOVLW	0x00
 	CALL	_delay_ms
-_00193_DS_
-;	.line	106; "main.c"	while(rdbit(PTC,5)==1);
+_00222_DS_
+;	.line	113; "main.c"	while(rdbit(PTC,3)==1);
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
-	ANDLW	0x20
+	ANDLW	0x08
 	BTFSS	STATUS,2
 	MOVLW	0x01
 	MOVWF	r0x100A
 	MOVWF	r0x100B
 	XORLW	0x01
 	BTFSC	STATUS,2
-	GOTO	_00193_DS_
+	GOTO	_00222_DS_
 	RETURN	
 
 ;***
@@ -513,12 +535,12 @@ _00193_DS_
 ;; Starting pCode block
 _sensitivity_up	;Function start
 ; 0 exit points
-;	.line	93; "main.c"	delay_ms(5);
+;	.line	100; "main.c"	delay_ms(5);
 	MOVLW	0x05
 	MOVWF	STK00
 	MOVLW	0x00
 	CALL	_delay_ms
-;	.line	94; "main.c"	if(rdbit(PTC,4)==1 && sensitivity<5){
+;	.line	101; "main.c"	if(rdbit(PTC,4)==1 && sensitivity<5){
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
 	ANDLW	0x10
@@ -528,21 +550,21 @@ _sensitivity_up	;Function start
 	MOVWF	r0x100B
 	XORLW	0x01
 	BTFSS	STATUS,2
-	GOTO	_00168_DS_
+	GOTO	_00197_DS_
 ;;unsigned compare: left < lit(0x5=5), size=1
 	MOVLW	0x05
-;	.line	95; "main.c"	sensitivity++;
+;	.line	102; "main.c"	sensitivity++;
 	SUBWF	_sensitivity,W
-;	.line	97; "main.c"	delay_ms(5);
+;	.line	104; "main.c"	delay_ms(5);
 	BTFSS	STATUS,0
 	INCF	_sensitivity,F
-_00168_DS_
+_00197_DS_
 	MOVLW	0x05
 	MOVWF	STK00
 	MOVLW	0x00
 	CALL	_delay_ms
-_00170_DS_
-;	.line	98; "main.c"	while(rdbit(PTC,4)==1);
+_00199_DS_
+;	.line	105; "main.c"	while(rdbit(PTC,4)==1);
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
 	ANDLW	0x10
@@ -552,7 +574,7 @@ _00170_DS_
 	MOVWF	r0x100B
 	XORLW	0x01
 	BTFSC	STATUS,2
-	GOTO	_00170_DS_
+	GOTO	_00199_DS_
 	RETURN	
 
 ;***
@@ -564,36 +586,32 @@ _00170_DS_
 ;; Starting pCode block
 _calibration	;Function start
 ; 2 exit points
-;	.line	79; "main.c"	INTF=0;
+;	.line	88; "main.c"	INTF=0;
 	BANKSEL	_INTCONbits
 	BCF	_INTCONbits,1
-_00159_DS_
-;	.line	80; "main.c"	while(INTF==0);                         //wait for rising edge generator
+_00188_DS_
+;	.line	89; "main.c"	while(INTF==0);                         //wait for rising edge generator
 	BANKSEL	_INTCONbits
 	BTFSS	_INTCONbits,1
-	GOTO	_00159_DS_
-;	.line	81; "main.c"	TMR1ON=1;
+	GOTO	_00188_DS_
+;	.line	90; "main.c"	TMR1ON=1;
 	BSF	_T1CONbits,0
-;	.line	82; "main.c"	INTF =0;
+;	.line	91; "main.c"	INTF =0;
 	BCF	_INTCONbits,1
-_00162_DS_
-;	.line	83; "main.c"	while(INTF==0);
+_00191_DS_
+;	.line	92; "main.c"	while(INTF==0);
 	BANKSEL	_INTCONbits
 	BTFSS	_INTCONbits,1
-	GOTO	_00162_DS_
-;	.line	84; "main.c"	TMR1ON=0;
+	GOTO	_00191_DS_
+;	.line	93; "main.c"	TMR1ON=0;
 	BCF	_T1CONbits,0
-;	.line	85; "main.c"	buffer_high = TMR1H;
+;	.line	94; "main.c"	buffer_high = TMR1H;
 	MOVF	_TMR1H,W
 	MOVWF	_buffer_high
-;	.line	86; "main.c"	buffer_low = TMR1L;
+;	.line	95; "main.c"	buffer_low = TMR1L;
 	MOVF	_TMR1L,W
 	MOVWF	_buffer_low
-;	.line	87; "main.c"	TMR1L=0;
-	CLRF	_TMR1L
-;	.line	88; "main.c"	TMR1H=0;
-	CLRF	_TMR1H
-;	.line	89; "main.c"	calibration_complete=1;
+;	.line	96; "main.c"	calibration_complete=1;
 	MOVLW	0x01
 	MOVWF	_calibration_complete
 	RETURN	
@@ -606,66 +624,59 @@ _00162_DS_
 ; 2 exit points
 ;has an exit
 ;functions called:
-;   _delay_ms
-;   _delay_ms
-;   _delay_ms
-;   _delay_ms
-;   _delay_ms
-;   _delay_ms
+;   _delay_us
+;   _delay_us
+;   _delay_us
+;   _delay_us
 ;4 compiler assigned registers:
-;   r0x100A
-;   r0x100B
-;   STK00
 ;   r0x100C
+;   r0x100D
+;   STK00
+;   r0x100E
 ;; Starting pCode block
 _send_error	;Function start
 ; 2 exit points
-;	.line	68; "main.c"	while(j<100) {
-	CLRF	r0x100A
-	CLRF	r0x100B
+;	.line	78; "main.c"	while(j<100) {
+	CLRF	r0x100C
+	CLRF	r0x100D
 ;;unsigned compare: left < lit(0x64=100), size=2
-_00142_DS_
+_00171_DS_
 	MOVLW	0x00
-	SUBWF	r0x100B,W
+	SUBWF	r0x100D,W
 	BTFSS	STATUS,2
-	GOTO	_00154_DS_
+	GOTO	_00183_DS_
 	MOVLW	0x64
-	SUBWF	r0x100A,W
-_00154_DS_
+	SUBWF	r0x100C,W
+_00183_DS_
 	BTFSC	STATUS,0
-	GOTO	_00144_DS_
-;;genSkipc:3247: created from rifx:0x7ffc9084bb80
-;	.line	69; "main.c"	setbit(PTC,0);
+	GOTO	_00174_DS_
+;;genSkipc:3247: created from rifx:0x7ffd7ce78fd0
+;	.line	79; "main.c"	setbit(PTC,0);
 	BANKSEL	_PORTC
 	BSF	_PORTC,0
-;	.line	70; "main.c"	delay_ms(10);
-	MOVLW	0x0a
+;	.line	80; "main.c"	delay_us(500);
+	MOVLW	0xf4
 	MOVWF	STK00
-	MOVLW	0x00
-	CALL	_delay_ms
-;	.line	71; "main.c"	clrbit(PTC,0);
+	MOVLW	0x01
+	CALL	_delay_us
+;	.line	81; "main.c"	clrbit(PTC,0);
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
-	MOVWF	r0x100C
+	MOVWF	r0x100E
 	MOVLW	0xfe
-	ANDWF	r0x100C,W
+	ANDWF	r0x100E,W
 	MOVWF	_PORTC
-;	.line	72; "main.c"	delay_ms(10);
-	MOVLW	0x0a
+;	.line	82; "main.c"	delay_us(500);
+	MOVLW	0xf4
 	MOVWF	STK00
-	MOVLW	0x00
-	CALL	_delay_ms
-;	.line	73; "main.c"	j++;
-	INCF	r0x100A,F
+	MOVLW	0x01
+	CALL	_delay_us
+;	.line	83; "main.c"	j++;
+	INCF	r0x100C,F
 	BTFSC	STATUS,2
-	INCF	r0x100B,F
-	GOTO	_00142_DS_
-_00144_DS_
-;	.line	75; "main.c"	delay_ms(1000);
-	MOVLW	0xe8
-	MOVWF	STK00
-	MOVLW	0x03
-	CALL	_delay_ms
+	INCF	r0x100D,F
+	GOTO	_00171_DS_
+_00174_DS_
 	RETURN	
 ; exit point of _send_error
 
@@ -686,22 +697,22 @@ _00144_DS_
 ;; Starting pCode block
 _bl_metal	;Function start
 ; 2 exit points
-;	.line	60; "main.c"	setbit(PTC,0);
+;	.line	70; "main.c"	setbit(PTC,0);
 	BANKSEL	_PORTC
 	BSF	_PORTC,0
-;	.line	61; "main.c"	delay_ms(1);
+;	.line	71; "main.c"	delay_ms(1);
 	MOVLW	0x01
 	MOVWF	STK00
 	MOVLW	0x00
 	CALL	_delay_ms
-;	.line	62; "main.c"	clrbit(PTC,0);
+;	.line	72; "main.c"	clrbit(PTC,0);
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
 	MOVWF	r0x100A
 	MOVLW	0xfe
 	ANDWF	r0x100A,W
 	MOVWF	_PORTC
-;	.line	63; "main.c"	delay_ms(1);
+;	.line	73; "main.c"	delay_ms(1);
 	MOVLW	0x01
 	MOVWF	STK00
 	MOVLW	0x00
@@ -716,38 +727,118 @@ _bl_metal	;Function start
 ; 2 exit points
 ;has an exit
 ;functions called:
-;   _delay_ms
-;   _delay_ms
-;   _delay_ms
-;   _delay_ms
+;   _delay_us
+;   _delay_us
+;   _delay_us
+;   _delay_us
 ;2 compiler assigned registers:
 ;   STK00
-;   r0x100A
+;   r0x100C
 ;; Starting pCode block
 _dr_metal	;Function start
 ; 2 exit points
-;	.line	54; "main.c"	setbit(PTC,0);
+;	.line	64; "main.c"	setbit(PTC,0);
 	BANKSEL	_PORTC
 	BSF	_PORTC,0
-;	.line	55; "main.c"	delay_ms(20);
-	MOVLW	0x14
+;	.line	65; "main.c"	delay_us(200);
+	MOVLW	0xc8
 	MOVWF	STK00
 	MOVLW	0x00
-	CALL	_delay_ms
-;	.line	56; "main.c"	clrbit(PTC,0);
+	CALL	_delay_us
+;	.line	66; "main.c"	clrbit(PTC,0);
 	BANKSEL	_PORTC
 	MOVF	_PORTC,W
-	MOVWF	r0x100A
+	MOVWF	r0x100C
 	MOVLW	0xfe
-	ANDWF	r0x100A,W
+	ANDWF	r0x100C,W
 	MOVWF	_PORTC
-;	.line	57; "main.c"	delay_ms(20);
-	MOVLW	0x14
+;	.line	67; "main.c"	delay_us(200);
+	MOVLW	0xc8
 	MOVWF	STK00
 	MOVLW	0x00
-	CALL	_delay_ms
+	CALL	_delay_us
 	RETURN	
 ; exit point of _dr_metal
+
+;***
+;  pBlock Stats: dbName = C
+;***
+;entry:  _delay_us	;Function start
+; 2 exit points
+;has an exit
+;9 compiler assigned registers:
+;   r0x1004
+;   STK00
+;   r0x1005
+;   r0x1006
+;   r0x1007
+;   r0x1008
+;   r0x1009
+;   r0x100A
+;   r0x100B
+;; Starting pCode block
+_delay_us	;Function start
+; 2 exit points
+;	.line	51; "main.c"	void delay_us(unsigned int us){
+	MOVWF	r0x1004
+	MOVF	STK00,W
+	MOVWF	r0x1005
+;	.line	56; "main.c"	for(i=0;i<us;i++){
+	CLRF	r0x1006
+	CLRF	r0x1007
+_00139_DS_
+	MOVF	r0x1004,W
+	SUBWF	r0x1007,W
+	BTFSS	STATUS,2
+	GOTO	_00157_DS_
+	MOVF	r0x1005,W
+	SUBWF	r0x1006,W
+_00157_DS_
+	BTFSC	STATUS,0
+	GOTO	_00141_DS_
+;;genSkipc:3247: created from rifx:0x7ffd7ce78fd0
+;	.line	58; "main.c"	while(j<timerBuffer){j++;}
+	CLRF	r0x1008
+	CLRF	r0x1009
+	CLRF	r0x100A
+	CLRF	r0x100B
+;;unsigned compare: left < lit(0x14=20), size=4
+_00134_DS_
+	MOVLW	0x00
+	SUBWF	r0x100B,W
+	BTFSS	STATUS,2
+	GOTO	_00158_DS_
+	MOVLW	0x00
+	SUBWF	r0x100A,W
+	BTFSS	STATUS,2
+	GOTO	_00158_DS_
+	MOVLW	0x00
+	SUBWF	r0x1009,W
+	BTFSS	STATUS,2
+	GOTO	_00158_DS_
+	MOVLW	0x14
+	SUBWF	r0x1008,W
+_00158_DS_
+	BTFSC	STATUS,0
+	GOTO	_00140_DS_
+;;genSkipc:3247: created from rifx:0x7ffd7ce78fd0
+	INCF	r0x1008,F
+	BTFSC	STATUS,2
+	INCF	r0x1009,F
+	BTFSC	STATUS,2
+	INCF	r0x100A,F
+	BTFSC	STATUS,2
+	INCF	r0x100B,F
+	GOTO	_00134_DS_
+_00140_DS_
+;	.line	56; "main.c"	for(i=0;i<us;i++){
+	INCF	r0x1006,F
+	BTFSC	STATUS,2
+	INCF	r0x1007,F
+	GOTO	_00139_DS_
+_00141_DS_
+	RETURN	
+; exit point of _delay_us
 
 ;***
 ;  pBlock Stats: dbName = C
@@ -766,11 +857,11 @@ _dr_metal	;Function start
 ;; Starting pCode block
 _delay_ms	;Function start
 ; 2 exit points
-;	.line	42; "main.c"	void delay_ms ( unsigned int ms) {
+;	.line	41; "main.c"	void delay_ms ( unsigned int ms) {
 	MOVWF	r0x1004
 	MOVF	STK00,W
 	MOVWF	r0x1005
-;	.line	46; "main.c"	for(i=0;i<ms;i++){
+;	.line	45; "main.c"	for(i=0;i<ms;i++){
 	CLRF	r0x1006
 	CLRF	r0x1007
 _00110_DS_
@@ -783,28 +874,28 @@ _00110_DS_
 _00128_DS_
 	BTFSC	STATUS,0
 	GOTO	_00112_DS_
-;;genSkipc:3247: created from rifx:0x7ffc9084bb80
-;	.line	48; "main.c"	while(j<timerBuffer/50){j++;}
+;;genSkipc:3247: created from rifx:0x7ffd7ce78fd0
+;	.line	47; "main.c"	while(j<timerBuffer){j++;}
 	CLRF	r0x1008
 	CLRF	r0x1009
-;;unsigned compare: left < lit(0x190=400), size=2
+;;unsigned compare: left < lit(0x4E20=20000), size=2
 _00105_DS_
-	MOVLW	0x01
+	MOVLW	0x4e
 	SUBWF	r0x1009,W
 	BTFSS	STATUS,2
 	GOTO	_00129_DS_
-	MOVLW	0x90
+	MOVLW	0x20
 	SUBWF	r0x1008,W
 _00129_DS_
 	BTFSC	STATUS,0
 	GOTO	_00111_DS_
-;;genSkipc:3247: created from rifx:0x7ffc9084bb80
+;;genSkipc:3247: created from rifx:0x7ffd7ce78fd0
 	INCF	r0x1008,F
 	BTFSC	STATUS,2
 	INCF	r0x1009,F
 	GOTO	_00105_DS_
 _00111_DS_
-;	.line	46; "main.c"	for(i=0;i<ms;i++){
+;	.line	45; "main.c"	for(i=0;i<ms;i++){
 	INCF	r0x1006,F
 	BTFSC	STATUS,2
 	INCF	r0x1007,F
@@ -815,6 +906,6 @@ _00112_DS_
 
 
 ;	code size estimation:
-;	  310+   29 =   339 instructions (  736 byte)
+;	  365+   30 =   395 instructions (  850 byte)
 
 	end

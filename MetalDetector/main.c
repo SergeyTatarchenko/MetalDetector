@@ -28,33 +28,43 @@ unsigned char calibration_complete ;
 unsigned char buffer_high,buffer_low;
 unsigned char sensitivity=0;
 //**************************
-void PORT_CONFIG();
 void send_error();
-void TIMER_CONFIG();
 void calibration();
 void send_signal();
 void sensitivity_up();
 void sensitivity_down();
 void delay_ms( unsigned int ms);
 void check_generator(unsigned char Hbyte, unsigned char Lbyte);
+void delay_us(unsigned int us);
 
 
 void delay_ms ( unsigned int ms) {
     #ifdef FREQ
     unsigned int timerBuffer = FREQ/1000;
     unsigned int i,j;
-    for(i=0;i<ms;i++){
+     for(i=0;i<ms;i++){
         j=0;
-        while(j<timerBuffer/50){j++;}
+        while(j<timerBuffer){j++;}
     }
     #endif // FREQ
+}
+void delay_us(unsigned int us){
+#ifdef FREQ
+    unsigned long int timerBuffer = FREQ/1000000;
+    unsigned int i;
+    unsigned long int j;
+    for(i=0;i<us;i++){
+        j=0;
+        while(j<timerBuffer){j++;}
+    }
+#endif
 }
 //**************************
 void dr_metal(){
     setbit(PTC,0);
-    delay_ms(20);
+    delay_us(200);
     clrbit(PTC,0);
-    delay_ms(20);
+    delay_us(200);
 }
 void bl_metal(){
     setbit(PTC,0);
@@ -67,12 +77,11 @@ void send_error () {
    unsigned int j =0;
    while(j<100) {
         setbit(PTC,0);
-        delay_ms(10);
+        delay_us(500);
         clrbit(PTC,0);
-        delay_ms(10);
+        delay_us(500);
         j++;
    }
-   delay_ms(1000);
 }
 
 void calibration (){
@@ -84,8 +93,6 @@ void calibration (){
     TMR1ON=0;
     buffer_high = TMR1H;
     buffer_low = TMR1L;
-    TMR1L=0;
-    TMR1H=0;
     calibration_complete=1;
 }
 
@@ -99,11 +106,11 @@ void sensitivity_up(){
 }
 void sensitivity_down(){
         delay_ms(5);
-        if(rdbit(PTC,5)==1 && sensitivity>0){
+        if(rdbit(PTC,3)==1 && sensitivity > 0){
             sensitivity--;
         }
         delay_ms(5);
-        while(rdbit(PTC,5)==1);
+        while(rdbit(PTC,3)==1);
 }
 
 void check_generator( unsigned char Hbyte, unsigned char Lbyte ){
@@ -132,18 +139,19 @@ void main() {
     TRA = 0b00000100;
     PTA = 0;
     setbit(PTC,1);                              // no calibration LED_RED
-	while (calibration_complete==0) {           //wait for calibration
-                if (rdbit(PTC,3)==1){
+    while(1){
+        while (calibration_complete==0) {           //wait for calibration
+                if (rdbit(PTC,5)==1){
                         delay_ms(5);            //contact bounce
-                        if(rdbit(PTC,3)==1){
+                        if(rdbit(PTC,5)==1){
                                 calibration();
                                 setbit(PTC,2);  //set LED_GREEN
                                 clrbit(PTC,1);
                         }
                 }
-                while(rdbit(PTC,3)==1);
+                while(rdbit(PTC,5)==1);
             }
-	while(1) {
+        while(calibration_complete ==1) {
             INTF=0;                             //start detect
             while (INTF==0);
             TMR1ON =1;
@@ -153,13 +161,19 @@ void main() {
             TH=TMR1H;
             TL=TMR1L;
             check_generator(TH,TL);
+            TMR1L=0;
+            TMR1H=0;
             if(rdbit(PTC,4)==1){sensitivity_up();}
-            if(rdbit(PTC,5)==1){sensitivity_down();}
-            if(rdbit(PTC,3)==1) {
+            if(rdbit(PTC,3)==1){sensitivity_down();}
+            if(rdbit(PTC,5)==1) {
                     delay_ms(5);                //contact bounce
-                    if(rdbit(PTC,3)==1){
+                    if(rdbit(PTC,5)==1){
                         calibration();
-                    }
-            }
-	}
+                        while(rdbit(PTC,5)==1);
+                        }
+                }
+        }
+
+    }
+
 }
